@@ -80,7 +80,7 @@ fun WeightScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .clickable { navController.navigate("next_screen") }, // zamijeni kasnije rutom za step 6
+                .clickable { navController.navigate("target_weight_screen") }, // zamijeni kasnije rutom za step 6
             shape = RoundedCornerShape(24.dp),
             color = Color(0xFF00E096)
         ) {
