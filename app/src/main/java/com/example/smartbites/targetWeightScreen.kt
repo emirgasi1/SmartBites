@@ -78,7 +78,7 @@ fun TargetWeightScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .clickable { navController.navigate("next_screen") }, // zamijeni kada dodas step 7
+                .clickable { navController.navigate("goal_screen") }, // zamijeni kada dodas step 7
             shape = RoundedCornerShape(24.dp),
             color = Color(0xFF00E096)
         ) {
