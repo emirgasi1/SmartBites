@@ -64,7 +64,7 @@ fun HeightScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .clickable { navController.navigate("next_screen") },
+                .clickable { navController.navigate("weight_input_screen") },
             shape = RoundedCornerShape(24.dp),
             color = Color(0xFF00E096)
         ) {
