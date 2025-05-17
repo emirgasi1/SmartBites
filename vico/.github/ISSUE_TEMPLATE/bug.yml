@@ -1,0 +1,71 @@
+name: Bug
+description: Report incorrect behavior.
+labels: ["bug"]
+body:
+  - type: textarea
+    attributes:
+      label: Example
+      description: >
+        Provide either a minimal reproducible example or the name of an affected sample chart.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: How to reproduce
+      description: Describe how to reproduce the bug using the example.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Observed behavior
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Module(s)
+      multiple: true
+      options:
+        - compose
+        - compose-m2
+        - compose-m3
+        - multiplatform
+        - multiplatform-m2
+        - multiplatform-m3
+        - views
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Platform(s)
+      multiple: true
+      options:
+        - Android
+        - iOS
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Platform version(s)
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Vico version(s)
+      description: For outdated versions, try updating Vico first.
+      multiple: true
+      options:
+        - 2.1.2
+        - 1.16.1
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional information

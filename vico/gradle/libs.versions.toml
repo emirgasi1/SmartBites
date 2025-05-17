@@ -1,0 +1,52 @@
+[versions]
+activity = "1.10.1"
+agp = "8.9.1"
+androidXAnnotation = "1.9.1"
+androidXCore = "1.15.0"
+appcompat = "1.7.0"
+composeBom = "2025.03.01"
+composeMultiplatform = "1.7.3"
+composeNavigation = "2.8.0-alpha12"
+composeStableMarker = "1.0.6"
+coroutines = "1.10.1"
+dateTime = "0.6.2"
+dokka = "2.0.0"
+jupiter = "5.12.1"
+kotlin = "2.1.20"
+material = "1.12.0"
+mavenPublish = "0.31.0"
+mockK = "1.13.17"
+testCore = "1.6.1"
+
+[libraries]
+activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
+androidApplication = { group = "com.android.application", name = "com.android.application.gradle.plugin", version.ref = "agp" }
+androidLibrary = { group = "com.android.library", name = "com.android.library.gradle.plugin", version.ref = "agp" }
+androidXAnnotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidXAnnotation" }
+androidXCore = { group = "androidx.core", name = "core-ktx", version.ref = "androidXCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+composeBom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+composeCompiler = { group = "org.jetbrains.kotlin.plugin.compose", name = "org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
+composeFoundation = { group = "androidx.compose.foundation", name = "foundation" }
+composeMaterial = { group = "androidx.compose.material", name = "material" }
+composeMaterial3 = { group = "androidx.compose.material3", name = "material3" }
+composeMultiplatform = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "composeMultiplatform" }
+composeNavigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
+composePreview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+composeStableMarker = { group = "com.github.skydoves", name = "compose-stable-marker", version.ref = "composeStableMarker" }
+composeUI = { group = "androidx.compose.ui", name = "ui" }
+composeUITooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+composeViewBinding = { group = "androidx.compose.ui", name = "ui-viewbinding" }
+coroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+dokka = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
+jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jupiter" }
+jupiterParams = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "jupiter" }
+kotlinAndroid = { group = "org.jetbrains.kotlin.android", name = "org.jetbrains.kotlin.android.gradle.plugin", version.ref = "kotlin" }
+kotlinMultiplatform = { group = "org.jetbrains.kotlin.multiplatform", name = "org.jetbrains.kotlin.multiplatform.gradle.plugin", version.ref = "kotlin" }
+kotlinStdLib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlinTest = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+kotlinDateTime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "dateTime" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+mavenPublish = { group = "com.vanniktech.maven.publish", name = "com.vanniktech.maven.publish.gradle.plugin", version.ref = "mavenPublish" }
+mockK = { group = "io.mockk", name = "mockk", version.ref = "mockK" }
+testCore = { group = "androidx.test", name = "core-ktx", version.ref = "testCore" }
