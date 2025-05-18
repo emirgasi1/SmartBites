@@ -20,9 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
-fun DashboardScreen(darkTheme: Boolean, onAddMealClick: () -> Unit,    onAddWaterClick: () -> Unit
+fun DashboardScreen(    darkTheme: Boolean,
+                        onAddMealClick: () -> Unit,
+                        onAddWaterClick: () -> Unit, onAddActivityClick: () -> Unit,
+                        navController: NavHostController
 ) {
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
@@ -37,6 +41,37 @@ fun DashboardScreen(darkTheme: Boolean, onAddMealClick: () -> Unit,    onAddWate
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+        ) {
+            // 🔵 Profil ikona gore desno
+            IconButton(
+                onClick = { navController.navigate("profile") },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.profile_icon),
+                    contentDescription = "Profile",
+                    modifier = Modifier.size(32.dp),
+                    tint = Color.Unspecified
+                )
+            }
+
+            // 🔵 Sadržaj ekrana u centru
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 56.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // ... ostatak sadržaja koji već imaš (Logo, tekstovi, dugmad itd.)
+            }
+        }
+
         // Logo
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
@@ -91,7 +126,8 @@ fun DashboardScreen(darkTheme: Boolean, onAddMealClick: () -> Unit,    onAddWate
         ) {
             DashboardButton("Add Meal", Modifier.weight(1f), onClick = onAddMealClick)
             DashboardButton("Add Water", modifier = Modifier.weight(1f), onClick = onAddWaterClick)
-            DashboardButton("Add Activity", Modifier.weight(1f), onClick = { /* TODO */ })
+            DashboardButton("Add Activity", Modifier.weight(1f), onClick = onAddActivityClick)
+
         }
 
         Spacer(modifier = Modifier.height(24.dp))

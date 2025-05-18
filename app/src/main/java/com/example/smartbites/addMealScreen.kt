@@ -110,6 +110,22 @@ fun AddMealScreen(darkTheme: Boolean, navController: NavHostController)
             FoodCard(food = food, darkTheme = darkTheme)
             Spacer(modifier = Modifier.height(12.dp))
         }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = { navController.navigate("mealhistory") },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF00C896),
+                contentColor = Color.Black
+            ),
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+        ) {
+            Text("View Meal History")
+        }
+
     }
 }
 

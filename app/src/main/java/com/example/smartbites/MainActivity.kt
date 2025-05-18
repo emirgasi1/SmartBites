@@ -63,7 +63,9 @@ class MainActivity : ComponentActivity() {
                         DashboardScreen(
                             darkTheme = darkTheme,
                             onAddMealClick = { navController.navigate("addmeal") },
-                            onAddWaterClick = { navController.navigate("addwater") }
+                            onAddWaterClick = { navController.navigate("addwater") } ,
+                            onAddActivityClick = { navController.navigate("activitylog") },
+                            navController = navController
 
                         )
                     }
@@ -74,7 +76,45 @@ class MainActivity : ComponentActivity() {
                     composable("addwater") {
                         AddWaterScreen(darkTheme = darkTheme, navController = navController)
                     }
+                    composable("profile") {
+                        YourProfileScreen(darkTheme = darkTheme)
+                    }
+                    composable("activitylog") {
+                        ActivityLogScreen(darkTheme = darkTheme)
+                    }
+                    composable("mealhistory") {
+                        MealHistoryScreen(darkTheme = darkTheme, navController = navController)
+                    }
 
+                    composable("caloriesover") {
+                        CaloriesOverTimeScreen(darkTheme = darkTheme)
+                    }
+                    composable("weightprogress") {
+                        WeightProgressScreen(darkTheme = darkTheme, navController = navController)
+                    }
+
+                    composable("weightchart") {
+                        WeightProgressChart(darkTheme = darkTheme)
+                    }
+                    composable("goal") {
+                        GoalScreen(
+                            navController = navController,
+                            darkTheme = darkTheme
+                        )
+                    }
+                    composable("heightinput") {
+                        HeightScreen(darkTheme = darkTheme, navController = navController)
+                    }
+                    composable("weight_input_screen") {
+                        WeightScreen(darkTheme = darkTheme, navController = navController)
+                    }
+
+                    composable("speed_screen") {
+                        SpeedScreen(navController = navController, darkTheme = darkTheme)
+                    }
+                    composable("target_weight") {
+                        TargetWeightScreen(navController = navController, darkTheme = darkTheme)
+                    }
 
                 }
             }
