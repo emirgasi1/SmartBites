@@ -23,6 +23,7 @@ import com.example.smartbites.ui.theme.titleTypography
 fun SignUpScreen(
     darkTheme: Boolean,
     onNavigateToLogin: () -> Unit,
+    onNavigateToName: () -> Unit,  // Dodaj ovaj parametar
     navController: NavHostController
 ) {
     var username by remember { mutableStateOf("") }
@@ -161,9 +162,11 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Register Button
         Button(
-            onClick = { /* TODO: Implement register logic */ },
+            onClick = {
+                // Pozovi navigaciju ka NameScreen kad se klikne dugme Sign Up
+                onNavigateToName()
+            },
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF00C896),
@@ -177,11 +180,16 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         // Forgot password
-        TextButton(onClick = { /* TODO: Navigate to ForgotPassword.kt */ },
+        TextButton(
+            onClick = { navController.navigate("reset_password") },
             contentPadding = PaddingValues(0.dp)
         ) {
-            Text("Forgot password?", color = Color(0xFF00C896))
+            Text(
+                text = "Forgot password?",
+                color = Color(0xFF00C896)
+            )
         }
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
