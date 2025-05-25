@@ -46,7 +46,7 @@ fun AddWaterScreen(darkTheme: Boolean,  navController: NavHostController) {
             painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "Logo",
             modifier = Modifier
-                .size(200.dp)
+                .size(180.dp)
                 .clickable {
                     navController.navigate("dashboard") {
                         popUpTo("dashboard") { inclusive = true }

@@ -55,9 +55,12 @@ class MainActivity : ComponentActivity() {
                         SignUpScreen(
                             darkTheme = darkTheme,
                             onNavigateToLogin = { navController.popBackStack() },
+                            onNavigateToName = { navController.navigate("name") },  // Ovdje dodaj ovu navigaciju
                             navController = navController
                         )
                     }
+
+
 
                     composable("dashboard") {
                         DashboardScreen(
@@ -80,14 +83,14 @@ class MainActivity : ComponentActivity() {
                         YourProfileScreen(darkTheme = darkTheme)
                     }
                     composable("activitylog") {
-                        ActivityLogScreen(darkTheme = darkTheme)
+                        ActivityLogScreen(darkTheme = darkTheme, navController = navController)
                     }
                     composable("mealhistory") {
                         MealHistoryScreen(darkTheme = darkTheme, navController = navController)
                     }
 
                     composable("caloriesover") {
-                        CaloriesOverTimeScreen(darkTheme = darkTheme)
+                        CaloriesOverTimeScreen(darkTheme = darkTheme, navController = navController)
                     }
                     composable("weightprogress") {
                         WeightProgressScreen(darkTheme = darkTheme, navController = navController)
@@ -96,25 +99,97 @@ class MainActivity : ComponentActivity() {
                     composable("weightchart") {
                         WeightProgressChart(darkTheme = darkTheme)
                     }
+
+                    composable("heightinput") {
+                        HeightScreen(darkTheme = darkTheme, navController = navController)
+                    }
+
+
+
+                    composable("weight_input_screen") {
+                        WeightScreen(
+                            darkTheme = darkTheme,
+                            onNextClick = { navController.navigate("target_weight_screen") }
+                        )
+                    }
+                    composable("target_weight_screen") {
+                        TargetWeightScreen(
+                            darkTheme = darkTheme,
+                            onNextClick = { navController.navigate("goal") } // sljedeći ekran
+                        )
+                    }
                     composable("goal") {
                         GoalScreen(
                             navController = navController,
                             darkTheme = darkTheme
                         )
                     }
-                    composable("heightinput") {
-                        HeightScreen(darkTheme = darkTheme, navController = navController)
+
+
+
+                    composable("name") {
+                        NameScreen(
+                            darkTheme = darkTheme,
+                            onNextClick = { navController.navigate("gender") }
+                        )
                     }
-                    composable("weight_input_screen") {
-                        WeightScreen(darkTheme = darkTheme, navController = navController)
+                    composable("gender") {
+                        GenderScreen(
+                            darkTheme = darkTheme,
+                            onNextClick = { navController.navigate("dateofbirth") }
+                        )
+                    }
+
+                    composable("dateofbirth") {
+                        DateOfBirthScreen(
+                            darkTheme = darkTheme,
+                            onNextClick = { navController.navigate("heightinput") }
+                        )
+                    }
+                    composable("heightinput") {
+                        HeightScreen(
+                            darkTheme = darkTheme,
+                            navController = navController
+                        )
                     }
 
                     composable("speed_screen") {
-                        SpeedScreen(navController = navController, darkTheme = darkTheme)
+                        SpeedScreen(
+                            navController = navController,
+                            darkTheme = darkTheme,
+                            onNextClick = {
+                                navController.navigate("smart_plan")
+                            }
+                        )
                     }
-                    composable("target_weight") {
-                        TargetWeightScreen(navController = navController, darkTheme = darkTheme)
+
+                    composable("smart_plan") {
+                        SmartPlanScreen(
+                            darkTheme = darkTheme,
+                            onContinueClick = {
+                                // ovdje idi na glavni ekran aplikacije, npr:
+                                navController.navigate("dashboard") {
+                                    popUpTo("smart_plan") { inclusive = true }
+                                }
+                            }
+                        )
                     }
+                    composable("reset_password") {
+                        ResetPasswordScreen(
+                            darkTheme = darkTheme,
+                            navController = navController,
+                            onBackToLogin = { navController.navigate("login") }
+                        )
+                    }
+
+                    composable("check_inbox") {
+                        CheckInboxScreen(darkTheme = darkTheme)
+                    }
+
+
+
+
+
 
                 }
             }
@@ -256,14 +331,15 @@ fun LoginScreen(
         }
 // "Forgot password?" clickable text
         TextButton(
-            onClick = {  },
-            contentPadding = PaddingValues(0.dp) // <-- bitno!
+            onClick = { navController.navigate("reset_password") },
+            contentPadding = PaddingValues(0.dp)
         ) {
             Text(
                 text = "Forgot password?",
                 color = Color(0xFF00C896)
             )
         }
+
 
 // "Don’t have an account? Register" clickable text
         Row(
