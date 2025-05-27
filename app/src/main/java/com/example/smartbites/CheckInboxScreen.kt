@@ -1,0 +1,70 @@
+package com.example.smartbites
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.smartbites.ui.theme.SmartBitesTheme
+
+@Composable
+fun CheckInboxScreen(darkTheme: Boolean) {
+    val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
+    val textColor = if (darkTheme) Color.White else Color.Black
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo__2_),
+            contentDescription = "Logo",
+            modifier = Modifier.size(140.dp)
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Check Inbox",
+            style = TextStyle(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = textColor
+            )
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "A confirmation link has been sent to\nyour email",
+            style = TextStyle(
+                fontSize = 14.sp,
+                color = Color.Gray
+            ),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewCheckInboxScreen() {
+    SmartBitesTheme(darkTheme = true) {
+        CheckInboxScreen(darkTheme = true)
+    }
+}
