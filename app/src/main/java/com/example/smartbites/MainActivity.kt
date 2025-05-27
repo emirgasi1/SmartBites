@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("weightchart") {
-                        WeightProgressChart(darkTheme = darkTheme)
+                        WeightProgressChart(darkTheme = darkTheme, navController = navController)
                     }
 
                     composable("heightinput") {
@@ -109,9 +109,11 @@ class MainActivity : ComponentActivity() {
                     composable("weight_input_screen") {
                         WeightScreen(
                             darkTheme = darkTheme,
+                            navController = navController,
                             onNextClick = { navController.navigate("target_weight_screen") }
                         )
                     }
+
                     composable("target_weight_screen") {
                         TargetWeightScreen(
                             darkTheme = darkTheme,
@@ -167,13 +169,13 @@ class MainActivity : ComponentActivity() {
                         SmartPlanScreen(
                             darkTheme = darkTheme,
                             onContinueClick = {
-                                // ovdje idi na glavni ekran aplikacije, npr:
                                 navController.navigate("dashboard") {
                                     popUpTo("smart_plan") { inclusive = true }
                                 }
                             }
                         )
                     }
+
                     composable("reset_password") {
                         ResetPasswordScreen(
                             darkTheme = darkTheme,

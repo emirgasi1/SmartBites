@@ -53,12 +53,12 @@ fun DashboardScreen(    darkTheme: Boolean,
                     .align(Alignment.TopEnd)
                     .padding(16.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.profile_icon),
+                Image(
+                    painter = painterResource(id = R.drawable.profile__user), // ⚠️ Nema tačka ni minus u imenu, koristi podvlaku
                     contentDescription = "Profile",
-                    modifier = Modifier.size(32.dp),
-                    tint = Color.Unspecified
+                    modifier = Modifier.size(32.dp)
                 )
+
             }
 
             // 🔵 Sadržaj ekrana u centru
