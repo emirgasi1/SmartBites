@@ -51,7 +51,6 @@ fun AppNavHost(navController: NavHostController) {
         }
 
         composable("final_step_screen") {
-            // Placeholder dok ne napraviš Step 9
             androidx.compose.foundation.layout.Box(
                 modifier = androidx.compose.ui.Modifier
                     .fillMaxSize()
