@@ -30,6 +30,7 @@ fun HeightScreen(navController: NavController) {
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
+        
         Image(
             painter = painterResource(id = R.drawable.smartbites_logo),
             contentDescription = "Logo",
@@ -37,12 +38,15 @@ fun HeightScreen(navController: NavController) {
             contentScale = ContentScale.Fit
         )
 
+       
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Step 4 of 9", color = Color.Gray, fontSize = 14.sp)
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = "How tall are you?", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
 
+       
+        
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
