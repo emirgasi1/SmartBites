@@ -57,7 +57,6 @@ fun WeightScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Polje za unos (vizuelno, kao dizajn placeholder)
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -75,7 +74,6 @@ fun WeightScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Next dugme
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
