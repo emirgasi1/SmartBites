@@ -1,4 +1,5 @@
 @Entity(tableName = "food")
+
 data class Food(
     @PrimaryKey(autoGenerate = true) val foodId: Int = 0,
     val name: String,
