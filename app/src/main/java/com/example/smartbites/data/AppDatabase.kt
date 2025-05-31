@@ -2,6 +2,7 @@
 
 
 = FILE: AppDatabase.kt ===
+    
 @Database(
     entities = [User::class, Goal::class, Food::class, Meal::class, MealItem::class, Reminder::class],
     version = 1,
