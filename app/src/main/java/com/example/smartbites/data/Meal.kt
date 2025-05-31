@@ -2,6 +2,7 @@
     tableName = "meal",
     foreignKeys = [ForeignKey(entity = User::class, parentColumns = ["userId"], childColumns = ["userId"], onDelete = ForeignKey.CASCADE)]
 )
+
 data class Meal(
     @PrimaryKey(autoGenerate = true) val mealId: Int = 0,
     val userId: Int,
