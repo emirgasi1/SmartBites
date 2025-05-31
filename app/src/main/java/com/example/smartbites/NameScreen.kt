@@ -17,13 +17,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartbites.ui.theme.SmartBitesTheme
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun NameScreen(
     darkTheme: Boolean,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: UserSetupViewModel
 ) {
-    var name by remember { mutableStateOf("") }
+    val userSetupState by viewModel.userSetupState.collectAsState()
 
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
@@ -64,8 +66,8 @@ fun NameScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
+            value = userSetupState.name,
+            onValueChange = { viewModel.onNameChange(it) },
             placeholder = { Text("Your name") },
             singleLine = true,
             modifier = Modifier
@@ -97,10 +99,3 @@ fun NameScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewNameScreen() {
-    SmartBitesTheme(darkTheme = true) {
-        NameScreen(darkTheme = true, onNextClick = {})
-    }
-}

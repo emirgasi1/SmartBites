@@ -22,14 +22,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.smartbites.ui.theme.titleTypography
+import com.example.smartbites.ui.viewmodel.WaterMealViewModel
 
 @Composable
-fun AddWaterScreen(darkTheme: Boolean,  navController: NavHostController) {
+fun AddWaterScreen(darkTheme: Boolean,
+                   navController: NavHostController,
+                   viewModel: WaterMealViewModel
+) {
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
     val accent = Color(0xFF00C896)
 
     var searchQuery by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -41,7 +46,6 @@ fun AddWaterScreen(darkTheme: Boolean,  navController: NavHostController) {
     ) {
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Logo
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "Logo",
@@ -56,22 +60,20 @@ fun AddWaterScreen(darkTheme: Boolean,  navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Title
         Text(
             text = "Track Your Water Intake",
-            style = titleTypography.titleLarge,  // Use the custom typography h1 style
+            style = titleTypography.titleLarge,
             color = textColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
                 .align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center // ✅ centrira tekst unutar kolone
+                textAlign = TextAlign.Center
         )
 
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        // Subtitle
         Text(
             text = "Stay hydrated",
             fontSize = 14.sp,
@@ -80,19 +82,26 @@ fun AddWaterScreen(darkTheme: Boolean,  navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // Buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            WaterAmountButton("+250ml", modifier = Modifier.padding(end = 16.dp))
-            WaterAmountButton("+500ml", modifier = Modifier.padding(start = 16.dp))
+            WaterAmountButton("+250ml", onClick = { viewModel.addWater(250) }, modifier = Modifier.padding(end = 16.dp))
+            WaterAmountButton("+500ml", onClick = { viewModel.addWater(500) }, modifier = Modifier.padding(start = 16.dp))
         }
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // Search bar (optional placeholder)
+        Text(
+            text = "Total intake: ${uiState.waterIntakeMl} ml",
+            fontSize = 16.sp,
+            color = textColor,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+
         TextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -118,16 +127,16 @@ fun AddWaterScreen(darkTheme: Boolean,  navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(36.dp))
 
-        // Confirm Button
+
         Button(
-            onClick = { /* TODO: Save water intake */ },
+            onClick = { navController.navigate("dashboard") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = accent,
                 contentColor = Color.Black
             ),
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier
-                .width(200.dp) // ✅ fiksna širina
+                .width(200.dp)
                 .height(48.dp)
         ) {
             Text("I drank it")
@@ -136,9 +145,11 @@ fun AddWaterScreen(darkTheme: Boolean,  navController: NavHostController) {
 }
 
 @Composable
-fun WaterAmountButton(label: String, modifier: Modifier = Modifier) {
+fun WaterAmountButton( label: String,
+                       onClick: () -> Unit,
+                       modifier: Modifier = Modifier) {
     OutlinedButton(
-        onClick = { /* TODO: handle selection */ },
+        onClick = onClick,
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Transparent,
             contentColor = Color(0xFF00C896)

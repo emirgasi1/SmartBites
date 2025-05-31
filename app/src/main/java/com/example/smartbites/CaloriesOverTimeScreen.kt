@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,19 +15,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.StatsViewModel
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 
+
 @Composable
 fun CaloriesOverTimeScreen(
     darkTheme: Boolean,
-    navController: NavController
+    navController: NavController,
+    viewModel: StatsViewModel
 ) {
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
+    val uiState = viewModel.uiState.collectAsState().value
 
-    val model = entryModelOf(2100f, 1800f, 2200f, 2000f, 2300f, 1750f, 1900f)
+    val model = entryModelOf(*uiState.caloriesOverTime.map { it.toFloat() }.toFloatArray())
+
 
     Column(
         modifier = Modifier
@@ -64,6 +70,8 @@ fun CaloriesOverTimeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
+                .padding(bottom = 32.dp)
         )
+
     }
 }

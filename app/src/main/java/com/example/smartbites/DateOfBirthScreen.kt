@@ -19,18 +19,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.smartbites.ui.theme.SmartBitesTheme
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun DateOfBirthScreen(
     darkTheme: Boolean,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: UserSetupViewModel
 ) {
-    var dob by remember { mutableStateOf("") }
+    val userSetupState by viewModel.userSetupState.collectAsState()
 
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
     val greenColor = Color(0xFF00C896)
-    val isValid = dob.matches(Regex("^\\d{2}/\\d{2}/\\d{4}$"))
+    val isValid = userSetupState.dateOfBirth.matches(Regex("^\\d{2}/\\d{2}/\\d{4}$"))
 
     Column(
         modifier = Modifier
@@ -64,12 +66,12 @@ fun DateOfBirthScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = dob,
-            onValueChange = { dob = it },
+            value = userSetupState.dateOfBirth,
+            onValueChange = { viewModel.onDateOfBirthChange(it) },
             placeholder = { Text("mm/dd/yyyy") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Phone, // 👈 Ovdje je promjena
+                keyboardType = KeyboardType.Phone,
                 imeAction = ImeAction.Done
             ),
             modifier = Modifier
@@ -105,10 +107,4 @@ fun DateOfBirthScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewDateOfBirthScreen() {
-    SmartBitesTheme(darkTheme = true) {
-        DateOfBirthScreen(darkTheme = true, onNextClick = {})
-    }
-}
+

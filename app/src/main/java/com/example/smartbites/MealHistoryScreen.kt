@@ -2,12 +2,10 @@ package com.example.smartbites
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,17 +18,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.Meal
+import com.example.smartbites.ui.viewmodel.WaterMealViewModel
 
 @Composable
 fun MealHistoryScreen(
     darkTheme: Boolean,
-    navController: NavController
+    navController: NavController,
+    viewModel: WaterMealViewModel
 ) {
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
     val cardColor = if (darkTheme) Color(0xFF2C2C2C) else Color(0xFFF3F3F3)
     val textColor = if (darkTheme) Color.White else Color.Black
 
     var search by remember { mutableStateOf(TextFieldValue("")) }
+    val uiState by viewModel.uiState.collectAsState()
+
+
+    val filteredMeals = uiState.mealHistory.filter {
+        it.name.contains(search.text, ignoreCase = true)
+    }
 
     Column(
         modifier = Modifier
@@ -39,7 +46,7 @@ fun MealHistoryScreen(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Logo
+
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "App Logo",
@@ -49,7 +56,7 @@ fun MealHistoryScreen(
             contentScale = ContentScale.Fit
         )
 
-        // Title
+
         Text(
             text = "Your Meal History",
             color = textColor,
@@ -65,7 +72,7 @@ fun MealHistoryScreen(
             textAlign = TextAlign.Center
         )
 
-        // Search bar
+
         OutlinedTextField(
             value = search,
             onValueChange = { search = it },
@@ -78,23 +85,24 @@ fun MealHistoryScreen(
             textStyle = androidx.compose.ui.text.TextStyle(color = textColor, fontSize = 16.sp)
         )
 
-        // Date heading
-        Text(
-            text = "March 31",
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
-            color = Color.LightGray,
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(bottom = 8.dp)
-        )
 
-        MealEntryItem(food = "Banana", kcal = "-134 kcal", cardColor = cardColor, textColor = textColor)
-        MealEntryItem(food = "Apple", kcal = "-95 kcal", cardColor = cardColor, textColor = textColor)
-        MealEntryItem(food = "Rice", kcal = "-200 kcal", cardColor = cardColor, textColor = textColor)
+        if (filteredMeals.isEmpty()) {
+            Text("No meals found.", color = Color.Gray)
+        } else {
+            filteredMeals.forEach { meal ->
+                MealEntryItem(
+                    meal = meal,
+                    cardColor = cardColor,
+                    textColor = textColor,
+                    onDeleteClick = { viewModel.deleteMeal(meal) }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Prvi button: Weight Progress Chart
+
         Button(
             onClick = { navController.navigate("weightprogress") },
             colors = ButtonDefaults.buttonColors(
@@ -109,7 +117,7 @@ fun MealHistoryScreen(
             Text("Weight Progress Chart")
         }
 
-        // Drugi button: Calories Over Time
+
         Button(
             onClick = { navController.navigate("caloriesover") },
             colors = ButtonDefaults.buttonColors(
@@ -125,8 +133,14 @@ fun MealHistoryScreen(
     }
 }
 
+
 @Composable
-fun MealEntryItem(food: String, kcal: String, cardColor: Color, textColor: Color) {
+fun MealEntryItem(
+    meal: Meal,
+    cardColor: Color,
+    textColor: Color,
+    onDeleteClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,9 +153,26 @@ fun MealEntryItem(food: String, kcal: String, cardColor: Color, textColor: Color
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = food, color = textColor, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-            Text(text = kcal, color = textColor, fontSize = 16.sp)
-            Text(text = "Edit", color = Color(0xFF00E096), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            Column {
+                Text(
+                    text = meal.name,
+                    color = textColor,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = "${meal.calories} kcal",
+                    color = textColor,
+                    fontSize = 14.sp
+                )
+            }
+            Text(
+                text = "Delete",
+                color = Color(0xFF00E096),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.clickable { onDeleteClick() }
+            )
         }
     }
 }

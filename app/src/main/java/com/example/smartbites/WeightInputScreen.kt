@@ -22,15 +22,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun WeightScreen(
     darkTheme: Boolean,
     navController: NavController,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: UserSetupViewModel
 ) {
-    var weight by remember { mutableStateOf("") }
-    val isValid = weight.toFloatOrNull() != null && weight.toFloat() > 0f
+    val userSetupState by viewModel.userSetupState.collectAsState()
+    val isValid = userSetupState.currentWeight.toFloatOrNull() != null && userSetupState.currentWeight.toFloat() > 0f
 
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
@@ -71,11 +73,9 @@ fun WeightScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Input za unos kilograma
-        // Input za unos kilograma
         OutlinedTextField(
-            value = weight,
-            onValueChange = { weight = it },
+            value = userSetupState.currentWeight,
+            onValueChange = { viewModel.onCurrentWeightChange(it) },
             placeholder = { Text("Weight in kg", color = Color.Gray) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -84,11 +84,11 @@ fun WeightScreen(
                 .background(Color(0xFF3A3A3A), RoundedCornerShape(8.dp)),
             textStyle = androidx.compose.ui.text.TextStyle(color = Color.White, fontSize = 16.sp),
             colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.White,      // bijela bordura kad je aktivno
-                unfocusedBorderColor = Color.White,    // bijela bordura kad NIJE aktivno
-                cursorColor = Color.White,             // bijela linija/blinker
-                focusedTextColor = Color.White,        // tekst bijeli
-                unfocusedTextColor = Color.White       // tekst bijeli
+                focusedBorderColor = Color.White,
+                unfocusedBorderColor = Color.White,
+                cursorColor = Color.White,
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White
             )
         )
 

@@ -17,19 +17,23 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartbites.ui.theme.titleTypography
+import com.example.smartbites.ui.viewmodel.AuthViewModel
 
 
 @Composable
 fun SignUpScreen(
     darkTheme: Boolean,
     onNavigateToLogin: () -> Unit,
-    onNavigateToName: () -> Unit,  // Dodaj ovaj parametar
-    navController: NavHostController
+    onNavigateToName: () -> Unit,
+    navController: NavHostController,
+    viewModel: AuthViewModel
 ) {
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    val registerState by viewModel.registerState.collectAsState()
+
+    val username = registerState.username
+    val email = registerState.email
+    val password = registerState.password
+    val confirmPassword = registerState.confirmPassword
 
 
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
@@ -44,7 +48,6 @@ fun SignUpScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        // Logo slika
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "Logo",
@@ -60,20 +63,19 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Register Text
         Text(
             text = "REGISTER",
-            style = titleTypography.titleLarge,  // Use the custom typography h1 style
-            color = textColor, // Title color dynamically set based on theme
+            style = titleTypography.titleLarge,
+            color = textColor,
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Username
+
         TextField(
             value = username,
-            onValueChange = { username = it },
+            onValueChange = { viewModel.onRegisterUsernameChange(it) },
             label = { Text("Username") },
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(),
@@ -92,10 +94,10 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Email
+
         TextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { viewModel.onRegisterEmailChange(it) },
             label = { Text("Email") },
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(),
@@ -114,10 +116,10 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Password
+
         TextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { viewModel.onRegisterPasswordChange(it) },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -138,10 +140,10 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Re-Use Password
+
         TextField(
             value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            onValueChange = { viewModel.onRegisterConfirmPasswordChange(it) },
             label = { Text("Re-Use Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -164,7 +166,7 @@ fun SignUpScreen(
 
         Button(
             onClick = {
-                // Pozovi navigaciju ka NameScreen kad se klikne dugme Sign Up
+                viewModel.register()
                 onNavigateToName()
             },
             shape = RoundedCornerShape(20.dp),
@@ -179,7 +181,6 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Forgot password
         TextButton(
             onClick = { navController.navigate("reset_password") },
             contentPadding = PaddingValues(0.dp)
@@ -193,7 +194,6 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Bottom Text "Don’t have an account? Register"
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {

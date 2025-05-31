@@ -20,14 +20,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun TargetWeightScreen(
     darkTheme: Boolean,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: UserSetupViewModel
 ) {
-    var targetWeight by remember { mutableStateOf("") }
-    val isValid = targetWeight.toFloatOrNull() != null && targetWeight.toFloat() > 0f
+    val userSetupState by viewModel.userSetupState.collectAsState()
+    val isValid = userSetupState.targetWeight.toFloatOrNull() != null && userSetupState.targetWeight.toFloat() > 0f
 
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
@@ -42,7 +44,7 @@ fun TargetWeightScreen(
         Spacer(modifier = Modifier.height(60.dp))
 
         Image(
-            painter = painterResource(id = R.drawable.logo__2_), // ili tvoj logo
+            painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "Logo",
             modifier = Modifier.size(120.dp),
             contentScale = ContentScale.Fit
@@ -68,10 +70,9 @@ fun TargetWeightScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Input za unos target kilograma
         OutlinedTextField(
-            value = targetWeight,
-            onValueChange = { targetWeight = it },
+            value = userSetupState.targetWeight,
+            onValueChange = { viewModel.onTargetWeightChange(it) },
             placeholder = { Text("Target weight in kg", color = Color.Gray) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

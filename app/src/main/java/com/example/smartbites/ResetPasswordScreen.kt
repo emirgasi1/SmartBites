@@ -16,14 +16,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.AuthViewModel
 
 @Composable
 fun ResetPasswordScreen(
     darkTheme: Boolean,
     navController: NavController,
-    onBackToLogin: () -> Unit
+    onBackToLogin: () -> Unit,
+    viewModel: AuthViewModel
 ) {
-    var email by remember { mutableStateOf("") }
+    val resetPasswordState by viewModel.resetPasswordState.collectAsState()
+
+    val email = resetPasswordState.email
     val isValid = email.contains("@") && email.contains(".")
 
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
@@ -54,7 +58,7 @@ fun ResetPasswordScreen(
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { viewModel.onResetPasswordEmailChange(it) },
             placeholder = { Text("Email") },
             singleLine = true,
             modifier = Modifier
@@ -67,8 +71,9 @@ fun ResetPasswordScreen(
 
         Button(
             onClick = {
-                // Ovdje bi išla logika za slanje emaila na backend (ako imaš)
-                navController.navigate("check_inbox") // <-- dodaj ovo da vodi na check inbox screen!
+                // Ovdje bi išla logika za slanje emaila na backend
+                viewModel.resetPassword()
+                navController.navigate("check_inbox") // dodaj ovo da vodi na check inbox screen
             },
             enabled = isValid,
             modifier = Modifier
