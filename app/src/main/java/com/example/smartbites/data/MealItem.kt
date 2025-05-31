@@ -6,6 +6,7 @@
         ForeignKey(entity = Food::class, parentColumns = ["foodId"], childColumns = ["foodId"], onDelete = ForeignKey.CASCADE)
     ]
 )
+
 data class MealItem(
     val mealId: Int,
     val foodId: Int,
