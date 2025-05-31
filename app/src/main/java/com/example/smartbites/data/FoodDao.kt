@@ -1,4 +1,5 @@
 @Dao
+
 interface FoodDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(food: Food): Long
