@@ -1,4 +1,5 @@
 @Dao
+
 interface GoalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(goal: Goal): Long
