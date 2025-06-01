@@ -17,23 +17,26 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.smartbites.ui.theme.titleTypography
-
+import com.example.smartbites.ui.viewmodel.AuthViewModel
 
 @Composable
 fun SignUpScreen(
     darkTheme: Boolean,
     onNavigateToLogin: () -> Unit,
-    onNavigateToName: () -> Unit,  // Dodaj ovaj parametar
-    navController: NavHostController
+    onNavigateToName: () -> Unit,
+    navController: NavHostController,
+    viewModel: AuthViewModel
 ) {
-    var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-
-
+    val registerState by viewModel.registerState.collectAsState()
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
+
+    LaunchedEffect(registerState.success) {
+        if (registerState.success) {
+            onNavigateToName()
+
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -43,8 +46,6 @@ fun SignUpScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
-        // Logo slika
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "Logo",
@@ -56,130 +57,97 @@ fun SignUpScreen(
                     }
                 }
         )
-
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Register Text
         Text(
             text = "REGISTER",
-            style = titleTypography.titleLarge,  // Use the custom typography h1 style
-            color = textColor, // Title color dynamically set based on theme
+            style = titleTypography.titleLarge,
+            color = textColor,
             modifier = Modifier.padding(vertical = 16.dp)
         )
-
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Username
         TextField(
-            value = username,
-            onValueChange = { username = it },
+            value = registerState.username,
+            onValueChange = { viewModel.onRegisterUsernameChange(it) },
             label = { Text("Username") },
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFF3C3C3B),
-                unfocusedContainerColor = Color(0xFF3C3C3B),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = Color.White
-            )
+            colors = textFieldColors()
         )
-
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Email
         TextField(
-            value = email,
-            onValueChange = { email = it },
+            value = registerState.email,
+            onValueChange = { viewModel.onRegisterEmailChange(it) },
             label = { Text("Email") },
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFF3C3C3B),
-                unfocusedContainerColor = Color(0xFF3C3C3B),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = Color.White
-            )
+            colors = textFieldColors()
         )
-
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Password
         TextField(
-            value = password,
-            onValueChange = { password = it },
+            value = registerState.password,
+            onValueChange = { viewModel.onRegisterPasswordChange(it) },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFF3C3C3B),
-                unfocusedContainerColor = Color(0xFF3C3C3B),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = Color.White
-            )
+            colors = textFieldColors()
         )
-
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Re-Use Password
         TextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            value = registerState.confirmPassword,
+            onValueChange = { viewModel.onRegisterConfirmPasswordChange(it) },
             label = { Text("Re-Use Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFF3C3C3B),
-                unfocusedContainerColor = Color(0xFF3C3C3B),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedLabelColor = Color.White,
-                unfocusedLabelColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                cursorColor = Color.White
-            )
+            colors = textFieldColors()
         )
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(24.dp))
+        if (registerState.error != null) {
+            Text(
+                text = registerState.error ?: "",
+                color = Color.Red,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+        if (registerState.isLoading) {
+            CircularProgressIndicator(
+                color = Color(0xFF00C896),
+                modifier = Modifier.size(36.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
-                // Pozovi navigaciju ka NameScreen kad se klikne dugme Sign Up
-                onNavigateToName()
+                viewModel.register { newUserId ->
+                    onNavigateToName()
+                }
             },
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF00C896),
                 contentColor = Color.Black
             ),
-            modifier = Modifier.fillMaxWidth().height(50.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            enabled = !registerState.isLoading
         ) {
             Text("Sign Up")
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        // Forgot password
+        Spacer(modifier = Modifier.height(8.dp))
         TextButton(
             onClick = { navController.navigate("reset_password") },
             contentPadding = PaddingValues(0.dp)
@@ -189,11 +157,8 @@ fun SignUpScreen(
                 color = Color(0xFF00C896)
             )
         }
-
-
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Bottom Text "Don’t have an account? Register"
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -213,3 +178,16 @@ fun SignUpScreen(
         }
     }
 }
+
+@Composable
+private fun textFieldColors() = TextFieldDefaults.colors(
+    focusedContainerColor = Color(0xFF3C3C3B),
+    unfocusedContainerColor = Color(0xFF3C3C3B),
+    focusedTextColor = Color.White,
+    unfocusedTextColor = Color.White,
+    focusedLabelColor = Color.White,
+    unfocusedLabelColor = Color.White,
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent,
+    cursorColor = Color.White
+)

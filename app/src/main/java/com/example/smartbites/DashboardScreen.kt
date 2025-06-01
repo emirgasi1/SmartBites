@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,13 +22,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.smartbites.ui.viewmodel.DashboardViewModel
+import androidx.compose.runtime.getValue
 
 @Composable
 fun DashboardScreen(    darkTheme: Boolean,
                         onAddMealClick: () -> Unit,
                         onAddWaterClick: () -> Unit, onAddActivityClick: () -> Unit,
-                        navController: NavHostController
+                        navController: NavHostController,
+                        viewModel: DashboardViewModel
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
     val borderColor = Color(0xFF00C896)
@@ -35,7 +41,7 @@ fun DashboardScreen(    darkTheme: Boolean,
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()) // ⬅️ dodano
+            .verticalScroll(rememberScrollState())
             .background(backgroundColor)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -43,10 +49,10 @@ fun DashboardScreen(    darkTheme: Boolean,
     {
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
+                .fillMaxWidth()
+                .padding(top = 16.dp)
         ) {
-            // 🔵 Profil ikona gore desno
+
             IconButton(
                 onClick = { navController.navigate("profile") },
                 modifier = Modifier
@@ -54,25 +60,23 @@ fun DashboardScreen(    darkTheme: Boolean,
                     .padding(16.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.profile__user), // ⚠️ Nema tačka ni minus u imenu, koristi podvlaku
+                    painter = painterResource(id = R.drawable.profile__user),
                     contentDescription = "Profile",
                     modifier = Modifier.size(32.dp)
                 )
 
             }
 
-            // 🔵 Sadržaj ekrana u centru
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 56.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // ... ostatak sadržaja koji već imaš (Logo, tekstovi, dugmad itd.)
             }
         }
 
-        // Logo
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "Logo",
@@ -100,7 +104,6 @@ fun DashboardScreen(    darkTheme: Boolean,
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Calorie circle
         Box(
             modifier = Modifier
                 .size(180.dp)
@@ -108,7 +111,7 @@ fun DashboardScreen(    darkTheme: Boolean,
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "1230/2250\nkcal",
+                text = "${uiState.consumedCalories}/${uiState.dailyCalories}\nkcal",
                 style = TextStyle(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -119,7 +122,6 @@ fun DashboardScreen(    darkTheme: Boolean,
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Add buttons
         Row(
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier.fillMaxWidth()
@@ -132,15 +134,14 @@ fun DashboardScreen(    darkTheme: Boolean,
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Info fields
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            InfoBox("Water: 1250ml")
-            InfoBox("Steps: 3,200")
-            InfoBox("Protein: 70g")
-            InfoBox("Carbs: 130g")
-            InfoBox("Fats: 45g")
+            InfoBox("Water: ${uiState.waterIntakeMl}ml")
+            InfoBox("Steps: ${uiState.steps}")
+            InfoBox("Protein: ${uiState.protein}g")
+            InfoBox("Carbs: ${uiState.carbs}g")
+            InfoBox("Fats: ${uiState.fats}g")
         }
     }
 }

@@ -3,12 +3,10 @@ package com.example.smartbites
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.StatsViewModel
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.core.entry.entryModelOf
@@ -25,10 +24,12 @@ import com.patrykandpatrick.vico.core.entry.entryModelOf
 @Composable
 fun WeightProgressChart(
     darkTheme: Boolean,
-    navController: NavController
+    navController: NavController,
+    viewModel: StatsViewModel
 ) {
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
+    val uiState = viewModel.uiState.collectAsState().value
 
     val model = entryModelOf(80.0f, 79.0f, 78.5f, 77.8f)
 
@@ -39,7 +40,6 @@ fun WeightProgressChart(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // LOGO
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
             contentDescription = "SmartBites Logo",
@@ -49,7 +49,6 @@ fun WeightProgressChart(
             contentScale = ContentScale.Fit
         )
 
-        // Naslov
         Text(
             text = "Weight Progress",
             color = textColor,
@@ -57,7 +56,6 @@ fun WeightProgressChart(
             fontWeight = FontWeight.Bold
         )
 
-        // Podnaslov
         Text(
             text = "Visualize your weight trend",
             color = Color.Gray,
@@ -65,7 +63,6 @@ fun WeightProgressChart(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Grafikon
         Chart(
             chart = lineChart(),
             model = model,

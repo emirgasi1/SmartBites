@@ -22,11 +22,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 
 @Composable
-fun HeightScreen(darkTheme: Boolean, navController: NavController) {
-    var height by remember { mutableStateOf("") } // stanje za unos visine
+fun HeightScreen(
+    darkTheme: Boolean,
+    navController: NavController,
+    viewModel: UserSetupViewModel
+) {
+    val userSetupState by viewModel.userSetupState.collectAsState()
 
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
@@ -57,8 +62,8 @@ fun HeightScreen(darkTheme: Boolean, navController: NavController) {
         Spacer(modifier = Modifier.height(24.dp))
 
         TextField(
-            value = height,
-            onValueChange = { height = it },
+            value = userSetupState.height,
+            onValueChange = { viewModel.onHeightChange(it) },
             placeholder = { Text("Height in cm", color = Color.Gray) },
             modifier = Modifier
                 .fillMaxWidth()
@@ -83,6 +88,7 @@ fun HeightScreen(darkTheme: Boolean, navController: NavController) {
 
         Button(
             onClick = { navController.navigate("weight_input_screen") },
+            enabled = userSetupState.height.isNotEmpty(), //Ako bude sta zezalo ovo trbe izbrisat
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),

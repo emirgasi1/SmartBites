@@ -6,8 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,17 +18,22 @@ import androidx.navigation.NavController
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
-fun GoalScreen(darkTheme: Boolean, navController: NavController) {
+fun GoalScreen(
+    darkTheme: Boolean,
+    navController: NavController,
+    viewModel: UserSetupViewModel
+) {
+    val userSetupState by viewModel.userSetupState.collectAsState()
+
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
     val boxSelectedColor = Color(0xFF00C896)
     val boxUnselectedColor = if (darkTheme) Color(0xFF2C2C2C) else Color(0xFFEFEFEF)
     val buttonColor = Color(0xFF00C896)
     val buttonTextColor = Color.Black
-
-    var selectedGoal by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -67,51 +70,54 @@ fun GoalScreen(darkTheme: Boolean, navController: NavController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Goal Options
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             GoalOption(
                 title = "Lose Weight",
-                isSelected = selectedGoal == "lose",
-                onClick = { selectedGoal = "lose" },
+                isSelected = userSetupState.goal == "lose",
+                onClick = { viewModel.onGoalChange("lose") },
                 selectedColor = boxSelectedColor,
                 unselectedColor = boxUnselectedColor,
-                textColor = if (selectedGoal == "lose") buttonTextColor else textColor,
+                textColor = if (userSetupState.goal == "lose") buttonTextColor else textColor,
                 modifier = Modifier.weight(1f)
             )
             GoalOption(
                 title = "Maintain Weight",
-                isSelected = selectedGoal == "maintain",
-                onClick = { selectedGoal = "maintain" },
+                isSelected = userSetupState.goal == "maintain",
+                onClick = { viewModel.onGoalChange("maintain") },
                 selectedColor = boxSelectedColor,
                 unselectedColor = boxUnselectedColor,
-                textColor = if (selectedGoal == "maintain") buttonTextColor else textColor,
+                textColor = if (userSetupState.goal == "maintain") buttonTextColor else textColor,
                 modifier = Modifier.weight(1f)
             )
             GoalOption(
                 title = "Gain Weight",
-                isSelected = selectedGoal == "gain",
-                onClick = { selectedGoal = "gain" },
+                isSelected = userSetupState.goal == "gain",
+                onClick = { viewModel.onGoalChange("gain") },
                 selectedColor = boxSelectedColor,
                 unselectedColor = boxUnselectedColor,
-                textColor = if (selectedGoal == "gain") buttonTextColor else textColor,
+                textColor = if (userSetupState.goal == "gain") buttonTextColor else textColor,
                 modifier = Modifier.weight(1f)
             )
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Next button
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
                 .clip(RoundedCornerShape(24.dp))
-                .background(buttonColor)
-                .clickable { navController.navigate("speed_screen") }
+                .background(
+                    if (userSetupState.goal.isNotEmpty()) buttonColor else Color.Gray
+                )
+                .clickable(enabled = userSetupState.goal.isNotEmpty()) {
+                    navController.navigate("speed_screen")
+                }
         ) {
             Text(
                 text = "Next",
@@ -148,7 +154,7 @@ fun GoalOption(
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center,
-            maxLines = 2 // Da ne puca na small ekranima
+            maxLines = 2
         )
     }
 }

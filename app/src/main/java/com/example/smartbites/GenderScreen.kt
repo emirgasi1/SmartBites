@@ -14,19 +14,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.smartbites.ui.theme.SmartBitesTheme
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun GenderScreen(
     darkTheme: Boolean,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: UserSetupViewModel
 ) {
-    var selectedGender by remember { mutableStateOf<String?>(null) }
+    val userSetupState by viewModel.userSetupState.collectAsState()
 
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
@@ -70,16 +69,16 @@ fun GenderScreen(
         ) {
             GenderOption(
                 text = "Male",
-                isSelected = selectedGender == "Male",
-                onClick = { selectedGender = "Male" },
+                isSelected = userSetupState.gender == "Male",
+                onClick = { viewModel.onGenderChange("Male") },
                 backgroundColor = buttonColor,
                 greenColor = greenColor,
                 width = 130.dp
             )
             GenderOption(
                 text = "Female",
-                isSelected = selectedGender == "Female",
-                onClick = { selectedGender = "Female" },
+                isSelected = userSetupState.gender == "Female",
+                onClick = { viewModel.onGenderChange("Female") },
                 backgroundColor = buttonColor,
                 greenColor = greenColor,
                 width = 130.dp
@@ -90,7 +89,7 @@ fun GenderScreen(
 
         Button(
             onClick = onNextClick,
-            enabled = selectedGender != null,
+            enabled = userSetupState.gender.isNotEmpty(),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -135,10 +134,3 @@ fun GenderOption(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewGenderScreen() {
-    SmartBitesTheme(darkTheme = true) {
-        GenderScreen(darkTheme = true, onNextClick = {})
-    }
-}

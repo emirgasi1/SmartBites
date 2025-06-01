@@ -17,14 +17,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun SpeedScreen(
     navController: NavController,
     darkTheme: Boolean,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    viewModel: UserSetupViewModel
 ) {
-    var selectedSpeed by remember { mutableStateOf("") }
+    val userSetupState by viewModel.userSetupState.collectAsState()
     val backgroundColor = if (darkTheme) Color(0xFF1C1C1C) else Color.White
     val accent = Color(0xFF00E096)
     val boxColor = if (darkTheme) Color(0xFF3A3A3A) else Color(0xFFEFEFEF)
@@ -71,22 +73,22 @@ fun SpeedScreen(
         ) {
             SpeedOption(
                 title = "Slow",
-                isSelected = selectedSpeed == "Slow",
-                onClick = { selectedSpeed = "Slow" },
+                isSelected = userSetupState.speed == "Slow",
+                onClick = { viewModel.onSpeedChange("Slow") },
                 darkTheme = darkTheme,
                 modifier = Modifier.weight(1f)
             )
             SpeedOption(
                 title = "Medium",
-                isSelected = selectedSpeed == "Medium",
-                onClick = { selectedSpeed = "Medium" },
+                isSelected = userSetupState.speed == "Medium",
+                onClick = { viewModel.onSpeedChange("Medium") },
                 darkTheme = darkTheme,
                 modifier = Modifier.weight(1f)
             )
             SpeedOption(
                 title = "Fast",
-                isSelected = selectedSpeed == "Fast",
-                onClick = { selectedSpeed = "Fast" },
+                isSelected = userSetupState.speed == "Fast",
+                onClick = { viewModel.onSpeedChange("Fast") },
                 darkTheme = darkTheme,
                 modifier = Modifier.weight(1f)
             )
@@ -100,9 +102,11 @@ fun SpeedScreen(
                 .fillMaxWidth()
                 .height(48.dp)
                 .clip(RoundedCornerShape(24.dp))
-                .background(accent)
+                .background(
+                    if (userSetupState.speed.isNotBlank()) accent else Color.Gray
+                )
                 .clickable(
-                    enabled = selectedSpeed.isNotBlank(),
+                    enabled = userSetupState.speed.isNotBlank(),
                     onClick = onNextClick
                 )
         ) {
@@ -122,11 +126,11 @@ fun SpeedOption(
     isSelected: Boolean,
     onClick: () -> Unit,
     darkTheme: Boolean,
-    modifier: Modifier = Modifier // <--- OVO KORISTI!
+    modifier: Modifier = Modifier
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier // Ovdje koristi parametar!
+        modifier = modifier
             .height(48.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(

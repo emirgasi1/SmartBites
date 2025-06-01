@@ -1,4 +1,4 @@
-package com.example.smartbites
+package com.example.smartbites.response
 
 data class LoginRequest(
     val email: String,

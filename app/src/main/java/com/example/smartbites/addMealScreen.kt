@@ -21,20 +21,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.smartbites.ui.theme.titleTypography
+import com.example.smartbites.ui.viewmodel.WaterMealViewModel
 
-data class FoodItem(val name: String, val kcalPer100g: Int)
+data class FoodItem(
+    val name: String,
+    val kcalPer100g: Int
+)
+
 
 @Composable
-fun AddMealScreen(darkTheme: Boolean, navController: NavHostController)
- {
+fun AddMealScreen(
+    darkTheme: Boolean,
+    navController: NavHostController,
+    viewModel: WaterMealViewModel,
+    userId: Int
+) {
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color.Black
 
     var searchQuery by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
+
     val foodList = listOf(
         FoodItem("Banana", 80),
-        FoodItem("Banana", 80) // Dummy duplicates for demo
+        FoodItem("Rice", 130),
+        FoodItem("Chicken", 165),
+        FoodItem("Apple", 52),
+        FoodItem("Oats", 389)
     )
+
+    val filteredFoodList = foodList.filter {
+        it.name.contains(searchQuery, ignoreCase = true)
+    }
 
     Column(
         modifier = Modifier
@@ -61,15 +79,14 @@ fun AddMealScreen(darkTheme: Boolean, navController: NavHostController)
 
         Text(
             text = "Add a Meal",
-            style = titleTypography.titleLarge,  // Use the custom typography h1 style
+            style = titleTypography.titleLarge,
             color = textColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center // ✅ centrira tekst unutar kolone
+            textAlign = TextAlign.Center
         )
-
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -105,11 +122,11 @@ fun AddMealScreen(darkTheme: Boolean, navController: NavHostController)
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        // Food items
-        foodList.forEach { food ->
-            FoodCard(food = food, darkTheme = darkTheme)
+        filteredFoodList.forEach { food ->
+            FoodCard(food = food, darkTheme = darkTheme, viewModel = viewModel, userId = userId)
             Spacer(modifier = Modifier.height(12.dp))
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
@@ -125,12 +142,17 @@ fun AddMealScreen(darkTheme: Boolean, navController: NavHostController)
         ) {
             Text("View Meal History")
         }
-
     }
 }
 
+
 @Composable
-fun FoodCard(food: FoodItem, darkTheme: Boolean) {
+fun FoodCard(
+    food: FoodItem,
+    darkTheme: Boolean,
+    viewModel: WaterMealViewModel,
+    userId: Int
+) {
     val boxColor = Color(0xFF3C3C3B)
     val textColor = Color.White
     val accent = Color(0xFF00C896)
@@ -144,7 +166,7 @@ fun FoodCard(food: FoodItem, darkTheme: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(90.dp) // ✅ veći box
+            .height(90.dp)
             .background(boxColor, shape = RoundedCornerShape(16.dp))
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -155,12 +177,12 @@ fun FoodCard(food: FoodItem, darkTheme: Boolean) {
                 food.name,
                 color = textColor,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp // ✅ veći font
+                fontSize = 18.sp
             )
             Text(
-                "${food.kcalPer100g} kcal/100grams",
+                "${food.kcalPer100g} kcal / 100g",
                 color = Color.LightGray,
-                fontSize = 14.sp // ✅ veći font
+                fontSize = 14.sp
             )
         }
 
@@ -170,7 +192,7 @@ fun FoodCard(food: FoodItem, darkTheme: Boolean) {
                 onValueChange = { grams = it },
                 modifier = Modifier
                     .width(70.dp)
-                    .height(40.dp), // ✅ viši input
+                    .height(40.dp),
                 singleLine = true,
                 placeholder = { Text("g", color = Color.Gray) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -189,9 +211,26 @@ fun FoodCard(food: FoodItem, darkTheme: Boolean) {
             Text(
                 "=$calculatedKcal kcal",
                 color = accent,
-                fontSize = 15.sp, // ✅ malo veće
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Medium
             )
+            Spacer(modifier = Modifier.width(10.dp))
+
+            Button(
+                onClick = {
+                    if (grams.isNotEmpty() && calculatedKcal > 0) {
+                        viewModel.addMeal(food.name, calculatedKcal, userId)
+                        grams = ""
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF00C896),
+                    contentColor = Color.Black
+                ),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Add")
+            }
         }
     }
 }

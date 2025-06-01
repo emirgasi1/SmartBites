@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -15,9 +16,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartbites.ui.viewmodel.StatsViewModel
 
 @Composable
-fun YourProfileScreen(darkTheme: Boolean) {
+fun YourProfileScreen(darkTheme: Boolean,
+                      viewModel: StatsViewModel
+) {
+    val uiState = viewModel.uiState.collectAsState().value
     val colors = MaterialTheme.colorScheme
     Column(
         modifier = Modifier
@@ -26,7 +31,6 @@ fun YourProfileScreen(darkTheme: Boolean) {
             .padding(top = 16.dp, start = 24.dp, end = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 🟢 LOGO
         Spacer(modifier = Modifier.height(16.dp))
         Image(
             painter = painterResource(id = R.drawable.logo__2_),
@@ -39,7 +43,6 @@ fun YourProfileScreen(darkTheme: Boolean) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 🧑‍💼 Titlovi
         Text(
             text = "Your Profile",
             color = colors.onBackground,
@@ -54,10 +57,10 @@ fun YourProfileScreen(darkTheme: Boolean) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        ProfileInfoBox(label = "Name", value = "User")
-        ProfileInfoBox(label = "Height", value = "175cm")
-        ProfileInfoBox(label = "Weight", value = "78kg")
-        ProfileInfoBox(label = "Goal", value = "Lose Weight")
+        ProfileInfoBox(label = "Name", value = uiState.userName)
+        ProfileInfoBox(label = "Height", value = "${uiState.heightCm}cm")
+        ProfileInfoBox(label = "Weight", value = "${uiState.weightKg}kg")
+        ProfileInfoBox(label = "Goal", value = uiState.goal)
     }
 }
 

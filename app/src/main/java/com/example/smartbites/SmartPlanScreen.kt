@@ -7,34 +7,38 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
-import androidx.navigation.NavController
-import com.example.smartbites.R
+import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun SmartPlanScreen(
     darkTheme: Boolean,
     onContinueClick: () -> Unit,
-    dailyCalories: String = "2,250 kcal",
-    goal: String = "Lose Weight (Fast)",
-    currentWeight: String = "78 kg",
-    targetWeight: String = "70kg"
+    viewModel: UserSetupViewModel
 ) {
-    // Theme-based colors
+    val userSetupState by viewModel.userSetupState.collectAsState()
     val backgroundColor = if (darkTheme) Color(0xFF232323) else Color.White
     val accentColor = Color(0xFF00E096)
     val cardColor = if (darkTheme) Color(0xFF3A3A3A) else Color(0xFFF3F3F3)
     val mainTextColor = if (darkTheme) Color.White else Color.Black
     val secondaryTextColor = if (darkTheme) Color.Gray else Color.DarkGray
+
+    val calories = userSetupState.dailyCaloriesGoal
+    LaunchedEffect(Unit) {
+        viewModel.generateSmartPlan()
+    }
 
     Column(
         modifier = Modifier
@@ -72,7 +76,6 @@ fun SmartPlanScreen(
             modifier = Modifier.padding(bottom = 22.dp)
         )
 
-        // Info box
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,28 +85,28 @@ fun SmartPlanScreen(
         ) {
             Column {
                 Text(
-                    text = "Daily Calorie Goal: $dailyCalories",
+                    text = "Daily Calorie Goal: $calories kcal",
                     color = mainTextColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Target: $goal",
+                    text = "Target: ${userSetupState.goal} (${userSetupState.speed})",
                     color = mainTextColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Current Weight: $currentWeight",
+                    text = "Current Weight: ${userSetupState.currentWeight} kg",
                     color = mainTextColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Target Weight: $targetWeight",
+                    text = "Target Weight: ${userSetupState.targetWeight} kg",
                     color = mainTextColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal
@@ -113,7 +116,6 @@ fun SmartPlanScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Continue to app button
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -132,3 +134,5 @@ fun SmartPlanScreen(
         }
     }
 }
+
+

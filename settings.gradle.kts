@@ -7,6 +7,9 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        plugins {
+            id("com.google.dagger.hilt.android") version "2.48"
+        }
         mavenCentral()
         gradlePluginPortal()
     }
