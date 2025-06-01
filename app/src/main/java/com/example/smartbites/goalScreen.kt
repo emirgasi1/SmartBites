@@ -72,7 +72,7 @@ fun GoalScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Goal Options
+        
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxWidth()
