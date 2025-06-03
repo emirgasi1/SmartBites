@@ -32,14 +32,7 @@ fun YourProfileScreen(darkTheme: Boolean,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .height(200.dp)
-                .width(200.dp),
-            contentScale = ContentScale.Fit
-        )
+
 
         Spacer(modifier = Modifier.height(8.dp))
 

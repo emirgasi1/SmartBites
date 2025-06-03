@@ -40,12 +40,6 @@ fun SpeedScreen(
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier.size(120.dp),
-            contentScale = ContentScale.Fit
-        )
 
         Spacer(modifier = Modifier.height(16.dp))
 

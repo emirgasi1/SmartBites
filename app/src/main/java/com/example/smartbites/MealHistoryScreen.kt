@@ -48,14 +48,7 @@ fun MealHistoryScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .height(200.dp)
-                .width(200.dp),
-            contentScale = ContentScale.Fit
-        )
+
 
 
         Text(

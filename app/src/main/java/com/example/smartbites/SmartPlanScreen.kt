@@ -20,13 +20,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
+import com.example.smartbites.ui.viewmodel.StatsViewModel
 import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
 fun SmartPlanScreen(
     darkTheme: Boolean,
     onContinueClick: () -> Unit,
-    viewModel: UserSetupViewModel
+    viewModel: UserSetupViewModel,
+    statsViewModel: StatsViewModel
 ) {
     val userSetupState by viewModel.userSetupState.collectAsState()
     val backgroundColor = if (darkTheme) Color(0xFF232323) else Color.White
@@ -39,6 +41,9 @@ fun SmartPlanScreen(
     LaunchedEffect(Unit) {
         viewModel.generateSmartPlan()
     }
+    LaunchedEffect(userSetupState) {
+        println("DEBUG USER SETUP STATE: $userSetupState")
+    }
 
     Column(
         modifier = Modifier
@@ -50,14 +55,7 @@ fun SmartPlanScreen(
     ) {
         Spacer(modifier = Modifier.height(12.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "SmartBites Logo",
-            modifier = Modifier
-                .height(110.dp)
-                .padding(bottom = 8.dp),
-            contentScale = ContentScale.Fit
-        )
+
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -123,7 +121,15 @@ fun SmartPlanScreen(
                 .height(48.dp)
                 .clip(RoundedCornerShape(24.dp))
                 .background(accentColor)
-                .clickable { onContinueClick() }
+                .clickable {
+                    statsViewModel.updateUserInfo(
+                        name = userSetupState.name,
+                        height = userSetupState.height.toIntOrNull() ?: 0,
+                        weight = userSetupState.currentWeight.toIntOrNull() ?: 0,
+                        goal = userSetupState.goal
+                    )
+                    onContinueClick()
+                }
         ) {
             Text(
                 text = "Continue to app",

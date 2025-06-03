@@ -38,6 +38,13 @@ fun LoginScreen(
     val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
     val textColor = if (darkTheme) Color.White else Color(0xFF00C896)
 
+    LaunchedEffect(loginState.success) {
+        if (loginState.success) {
+            onNavigateToDashboard()
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -46,17 +53,6 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier
-                .size(250.dp)
-                .clickable {
-                    navController.navigate("dashboard") {
-                        popUpTo("dashboard") { inclusive = true }
-                    }
-                }
-        )
         Text(
             text = "LOG IN",
             style = titleTypography.titleLarge,
@@ -178,105 +174,3 @@ fun LoginScreen(
     }
 }
 
-@Composable
-fun LoginScreenPreviewOnly(
-    darkTheme: Boolean,
-    loginState: LoginUiState = LoginUiState(),
-    onThemeToggle: () -> Unit = {},
-    onNavigateToSignUp: () -> Unit = {},
-    onNavigateToDashboard: () -> Unit = {},
-    navController: NavHostController = rememberNavController(),
-) {
-    val backgroundColor = if (darkTheme) Color(0xFF282727) else Color.White
-    val textColor = if (darkTheme) Color.White else Color(0xFF00C896)
-    var errorMessage by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-            .padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Ovdje možeš koristiti neki preview image ili skloniti za preview
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = "LOG IN",
-            style = titleTypography.titleLarge,
-            color = textColor,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(18.dp))
-
-        TextField(
-            value = loginState.email,
-            onValueChange = {},
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth(),
-            isError = errorMessage.isNotEmpty(),
-            shape = RoundedCornerShape(16.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextField(
-            value = loginState.password,
-            onValueChange = {},
-            label = { Text("Password") },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            visualTransformation = PasswordVisualTransformation()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        if (errorMessage.isNotEmpty()) {
-            Text(text = errorMessage, color = Color.Red)
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {},
-            modifier = Modifier.fillMaxWidth()
-        ) { Text("Login") }
-        TextButton(
-            onClick = {},
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Text(
-                text = "Forgot password?",
-                color = Color(0xFF00C896)
-            )
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Don’t have an account?",
-                color = if (darkTheme) Color.White else Color.Black
-            )
-            TextButton(
-                onClick = {},
-                contentPadding = PaddingValues(0.dp)
-            ) {
-                Text("Register", color = Color(0xFF00C896))
-            }
-        }
-        Button(
-            onClick = {},
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Toggle Dark/Light Mode")
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewLoginScreen() {
-    SmartBitesTheme(darkTheme = true) {
-        LoginScreenPreviewOnly(
-            darkTheme = true,
-            loginState = LoginUiState(
-                email = "preview@email.com",
-                password = "1234"
-            )
-        )
-    }
-}

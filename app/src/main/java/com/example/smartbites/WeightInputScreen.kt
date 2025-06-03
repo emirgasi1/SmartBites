@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.navigation.NavController
+import com.example.smartbites.ui.viewmodel.StatsViewModel
 import com.example.smartbites.ui.viewmodel.UserSetupViewModel
 
 @Composable
@@ -27,7 +28,8 @@ fun WeightScreen(
     darkTheme: Boolean,
     navController: NavController,
     onNextClick: () -> Unit,
-    viewModel: UserSetupViewModel
+    viewModel: UserSetupViewModel,
+    statsViewModel: StatsViewModel
 ) {
     val userSetupState by viewModel.userSetupState.collectAsState()
     val isValid = userSetupState.currentWeight.toFloatOrNull() != null && userSetupState.currentWeight.toFloat() > 0f
@@ -44,12 +46,7 @@ fun WeightScreen(
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier.size(120.dp),
-            contentScale = ContentScale.Fit
-        )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -93,7 +90,10 @@ fun WeightScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = onNextClick,
+            onClick = {
+                statsViewModel.updateWeight(userSetupState.currentWeight.toFloatOrNull() ?: 0f)
+                onNextClick()
+            },
             enabled = isValid,
             modifier = Modifier
                 .fillMaxWidth()

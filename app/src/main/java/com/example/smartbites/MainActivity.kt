@@ -10,7 +10,9 @@ import com.example.smartbites.ui.theme.SmartBitesTheme
 import com.example.smartbites.ui.navigation.AppNavHost
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -45,17 +45,7 @@ fun AddWaterScreen(darkTheme: Boolean,
     ) {
         Spacer(modifier = Modifier.height(32.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier
-                .size(180.dp)
-                .clickable {
-                    navController.navigate("dashboard") {
-                        popUpTo("dashboard") { inclusive = true }
-                    }
-                }
-        )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 

@@ -40,14 +40,7 @@ fun WeightProgressChart(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "SmartBites Logo",
-            modifier = Modifier
-                .height(150.dp)
-                .padding(bottom = 8.dp),
-            contentScale = ContentScale.Fit
-        )
+
 
         Text(
             text = "Weight Progress",

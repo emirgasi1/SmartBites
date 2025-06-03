@@ -47,12 +47,6 @@ fun HeightScreen(
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier.size(180.dp),
-            contentScale = ContentScale.Fit
-        )
 
         Spacer(modifier = Modifier.height(16.dp))
 

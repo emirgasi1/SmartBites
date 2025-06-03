@@ -40,11 +40,6 @@ fun DateOfBirthScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier.size(140.dp)
-        )
 
         Spacer(modifier = Modifier.height(12.dp))
 

@@ -9,9 +9,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.smartbites.ui.viewmodel.DashboardViewModel
-import androidx.compose.runtime.getValue
 
 @Composable
 fun DashboardScreen(    darkTheme: Boolean,
@@ -53,19 +56,9 @@ fun DashboardScreen(    darkTheme: Boolean,
                 .padding(top = 16.dp)
         ) {
 
-            IconButton(
-                onClick = { navController.navigate("profile") },
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.profile__user),
-                    contentDescription = "Profile",
-                    modifier = Modifier.size(32.dp)
-                )
 
-            }
+
+
 
 
             Column(
@@ -77,11 +70,7 @@ fun DashboardScreen(    darkTheme: Boolean,
             }
         }
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier.size(180.dp)
-        )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -145,6 +134,8 @@ fun DashboardScreen(    darkTheme: Boolean,
         }
     }
 }
+
+
 
 @Composable
 fun DashboardButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {

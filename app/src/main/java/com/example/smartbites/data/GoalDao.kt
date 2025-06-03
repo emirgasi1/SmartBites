@@ -15,12 +15,14 @@ interface GoalDao {
     suspend fun insert(goal: Goal): Long
 
     @Query("SELECT * FROM goal WHERE userId = :userId")
-    fun getGoalsByUser(userId: Int): Flow<List<Goal>>
+    fun getGoalsByUser(userId: Int): List<Goal>
 
     @Update
     suspend fun update(goal: Goal)
 
     @Delete
     suspend fun delete(goal: Goal)
-    fun getAllGoals(): Flow<List<Goal>>
+
+    @Query("SELECT * FROM goal")
+    suspend fun getAllGoals(): List<Goal>
 }

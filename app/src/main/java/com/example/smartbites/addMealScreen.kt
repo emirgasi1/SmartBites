@@ -63,17 +63,6 @@ fun AddMealScreen(
     ) {
         Spacer(modifier = Modifier.height(24.dp))
 
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "Logo",
-            modifier = Modifier
-                .size(180.dp)
-                .clickable {
-                    navController.navigate("dashboard") {
-                        popUpTo("dashboard") { inclusive = true }
-                    }
-                }
-        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -130,7 +119,7 @@ fun AddMealScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { navController.navigate("mealhistory") },
+            onClick = { navController.navigate("mealhistory/$userId") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF00C896),
                 contentColor = Color.Black

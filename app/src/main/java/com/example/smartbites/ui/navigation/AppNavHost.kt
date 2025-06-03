@@ -14,15 +14,10 @@ import com.example.smartbites.ui.viewmodel.WaterMealViewModel
 
 @Composable
 fun AppNavHost(navController: NavHostController, darkTheme: Boolean) {
-    val authViewModel: AuthViewModel = hiltViewModel()
-    val userSetupViewModel: UserSetupViewModel = hiltViewModel()
-    val dashboardViewModel: DashboardViewModel = hiltViewModel()
-    val waterMealViewModel: WaterMealViewModel = hiltViewModel()
-    val statsViewModel: StatsViewModel = hiltViewModel()
 
     NavHost(
         navController = navController,
-        startDestination = "dashboard"
+        startDestination = "login"
     ) {
         composable("login") {
             val authViewModel: AuthViewModel = hiltViewModel()
@@ -85,7 +80,8 @@ fun AppNavHost(navController: NavHostController, darkTheme: Boolean) {
                 darkTheme = darkTheme,
                 navController = navController,
                 onNextClick = { navController.navigate("target_weight") },
-                viewModel = hiltViewModel<UserSetupViewModel>()
+                viewModel = hiltViewModel<UserSetupViewModel>(),
+                statsViewModel = hiltViewModel<StatsViewModel>()
             )
         }
         composable("target_weight") {
@@ -118,19 +114,23 @@ fun AppNavHost(navController: NavHostController, darkTheme: Boolean) {
                         popUpTo("smart_plan") { inclusive = true }
                     }
                 },
-                viewModel = hiltViewModel<UserSetupViewModel>()
+                viewModel = hiltViewModel<UserSetupViewModel>(),
+                statsViewModel = hiltViewModel<StatsViewModel>()
             )
         }
         composable("dashboard") {
+            val dashboardViewModel: DashboardViewModel = hiltViewModel()
             DashboardScreen(
                 darkTheme = darkTheme,
-                onAddMealClick = { dashboardViewModel.addMeal(500, 30, 40, 20) },
-                onAddWaterClick = { dashboardViewModel.addWater(250) },
-                onAddActivityClick = { dashboardViewModel.addSteps(1000) },
+                onAddMealClick = { navController.navigate("addmeal/1") },
+                onAddWaterClick = { navController.navigate("addWater") },
+                onAddActivityClick = { navController.navigate("activitylog") },
                 navController = navController,
-                viewModel = hiltViewModel<DashboardViewModel>()
+                viewModel = dashboardViewModel
             )
         }
+
+
         composable("addmeal/{userId}") { backStackEntry ->
             val userId = backStackEntry.arguments?.getString("userId")?.toIntOrNull() ?: 1
             AddMealScreen(

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.smartbites.ui.viewmodel.StatsViewModel
+import ibu.edu.ba.myapplication.R
 
 @Composable
 fun ActivityLogScreen(
@@ -37,14 +38,7 @@ fun ActivityLogScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        Image(
-            painter = painterResource(id = R.drawable.logo__2_),
-            contentDescription = "App Logo",
-            modifier = Modifier
-                .height(200.dp)
-                .width(200.dp),
-            contentScale = ContentScale.Fit
-        )
+
         Spacer(modifier = Modifier.height(18.dp))
         Text(
             text = "Activity Log",
